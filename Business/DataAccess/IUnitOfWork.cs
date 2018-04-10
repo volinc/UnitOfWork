@@ -1,17 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Business.DataAccess
 {
     public interface IUnitOfWork
     {
-        void Add<T>(T entity) where T : IEntity;
+        IOrderRepository Orders { get; }
 
-        void AddRange<T>(IEnumerable<T> entities) where T : IEntity;
-
-        IOrderRepository OrderRepository { get; }
-
-        ISuggestionRepository SuggestionRepository { get; }
+        ISuggestionRepository Suggestions { get; }
 
         Task SaveAsync();
     }

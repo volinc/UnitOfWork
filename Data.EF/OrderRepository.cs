@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Business.DataAccess;
 using Business.Entities;
@@ -15,12 +16,20 @@ namespace Data.EF
         {
             this.dbContext = dbContext;            
             this.mapper = mapper;
-        }        
+        }
 
-        public async Task<Order> ReadByIdAsync(long id)
+        public Order Create(string beginAddress, string endAddress, string commentMessage, DateTimeOffset createdAt)
+        {
+            var order = new Order(beginAddress, endAddress, commentMessage, createdAt);
+            var data = mapper.To(order);
+            dbContext.Add(data);
+            return order;
+        }
+
+        public async Task<Order> ReadByIdAsync(long orderId)
         {
             var data = await dbContext.Orders
-                .Where(x => x.Id == id)
+                .Where(x => x.Id == orderId)
                 .Include(x => x.Comments)
                 .SingleOrDefaultAsync();
 

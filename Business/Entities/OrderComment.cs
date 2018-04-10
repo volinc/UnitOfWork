@@ -1,14 +1,23 @@
 ﻿using System;
 using Business.Data;
-using Business.DataAccess;
 
 namespace Business.Entities
 {
-    public class OrderComment : IEntity
+    public class OrderComment
     {
-        object IEntity.Data => data;
-
         private readonly OrderCommentData data;
+
+        public OrderComment(long orderId, string content, DateTimeOffset createdAt)
+        {
+            ThrowIfNullContent(content);
+
+            data = new OrderCommentData
+            {
+                OrderId = orderId,
+                Content = NormalizeText(content),
+                CreatedAt = createdAt,
+            };
+        }
 
         protected OrderComment(OrderCommentData data)
         {
@@ -21,23 +30,15 @@ namespace Business.Entities
 
         public DateTimeOffset CreatedAt => data.CreatedAt;
 
-        internal static string ThrowIfNullMessage(string message) =>
-            message ?? throw new ArgumentNullException(nameof(message));
+        internal static void ThrowIfNullContent(string content)
+        {
+            if (content == null) 
+                throw new ArgumentNullException(nameof(content));
+        }
 
         internal static OrderComment From(OrderCommentData data) => data == null ? null : new OrderComment(data);
 
-        internal static OrderComment Create(Order order, string content, DateTimeOffset createdAt)
-        {
-            if (order == null)
-                throw new ArgumentNullException(nameof(order));
-
-            return new OrderComment(new OrderCommentData
-            {
-                OrderId = order.Id,
-                Content = NormalizeText(content),
-                CreatedAt = createdAt,                
-            });
-        }
+        internal static OrderCommentData To(OrderComment entity) => entity?.data;
 
         private static string NormalizeText(string content) => content.Trim();
     }

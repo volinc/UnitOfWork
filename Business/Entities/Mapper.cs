@@ -6,7 +6,11 @@ namespace Business.Entities
     {
         public Order From(OrderData data) => Order.From(data);
 
+        public OrderData To(Order entity) => Order.To(entity);
+
         public OrderComment From(OrderCommentData data) => OrderComment.From(data);
+
+        public OrderCommentData To(OrderComment entity) => OrderComment.To(entity);
 
         public Suggestion From(SuggestionData data) => Suggestion.From(data);
 

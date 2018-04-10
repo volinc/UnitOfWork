@@ -2,16 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using Business.Data;
-using Business.DataAccess;
 
 namespace Business.Entities
 {
-    public class Order : IEntity
+    public class Order
     {
-        object IEntity.Data => data;
-
         private readonly OrderData data;
         private readonly List<OrderComment> comments;
+
+        public Order(string beginAddress, string endAddress, string commentMessage, DateTimeOffset createdAt)
+        {
+            data = new OrderData
+            {
+                BeginAddress = beginAddress,
+                EndAddress = endAddress,
+                CreatedAt = createdAt,
+            };
+
+            AddComment(commentMessage, createdAt);
+        }
 
         protected Order(OrderData data)
         {
@@ -32,11 +41,10 @@ namespace Business.Entities
 
         public void AddComment(string message, DateTimeOffset createdAt)
         {
-            var orderComment = OrderComment.Create(this, message, createdAt);
-            var entity = (IEntity) orderComment;
+            var comment = new OrderComment(Id, message, createdAt);
 
-            data.Comments.Add((OrderCommentData) entity.Data);
-            comments.Add(orderComment);
+            data.Comments.Add(OrderComment.To(comment));
+            comments.Add(comment);
         }        
 
         internal static string ThrowIfNullAddress(string address) =>
@@ -44,18 +52,6 @@ namespace Business.Entities
 
         internal static Order From(OrderData data) => data == null ? null : new Order(data);
 
-        public static Order Create(string beginAddress, string endAddress, string commentMessage, DateTimeOffset createdAt)
-        {            
-            var order = new Order(new OrderData
-            {
-                BeginAddress = beginAddress,
-                EndAddress = endAddress,
-                CreatedAt = createdAt,                
-            });
-
-            order.AddComment(commentMessage, createdAt);
-
-            return order;
-        }
+        internal static OrderData To(Order entity) => entity?.data;     
     }
 }
