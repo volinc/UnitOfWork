@@ -29,7 +29,7 @@ namespace Business.Entities
 
         public void AddComment(string message, DateTimeOffset createdAt)
         {
-            var comment = new OrderComment(Id, message, createdAt);
+            var comment = OrderComment.Create(this, message, createdAt);
 
             data.Comments.Add(OrderComment.Map.To(comment));
             comments.Add(comment);

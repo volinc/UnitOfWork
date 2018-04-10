@@ -6,19 +6,7 @@ namespace Business.Entities
     public class OrderComment
     {
         private readonly OrderCommentData data;
-
-        public OrderComment(long orderId, string content, DateTimeOffset createdAt)
-        {
-            ThrowIfNullContent(content);
-
-            data = new OrderCommentData
-            {
-                OrderId = orderId,
-                Content = NormalizeText(content),
-                CreatedAt = createdAt,
-            };
-        }
-
+        
         protected OrderComment(OrderCommentData data)
         {
             this.data = data;
@@ -38,11 +26,23 @@ namespace Business.Entities
 
         internal static class Map
         {
-            internal static OrderComment From(OrderCommentData data) => data == null ? null : new OrderComment(data);
+            public static OrderComment From(OrderCommentData data) => data == null ? null : new OrderComment(data);
 
-            internal static OrderCommentData To(OrderComment entity) => entity?.data;   
+            public static OrderCommentData To(OrderComment entity) => entity?.data;   
         }
         
-        private static string NormalizeText(string content) => content.Trim();        
+        private static string NormalizeText(string content) => content.Trim();
+
+        public static OrderComment Create(Order order, string content, DateTimeOffset createdAt)
+        {
+            ThrowIfNullContent(content);
+
+            return new OrderComment(new OrderCommentData
+            {
+                OrderId = order.Id,
+                Content = NormalizeText(content),
+                CreatedAt = createdAt,
+            });
+        }
     }
 }
