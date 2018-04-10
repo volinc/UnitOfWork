@@ -20,7 +20,7 @@ namespace Data.EF
 
         public Order Create(string beginAddress, string endAddress, string commentMessage, DateTimeOffset createdAt)
         {
-            var order = new Order(beginAddress, endAddress, commentMessage, createdAt);
+            var order = Order.CreatePresent(beginAddress, endAddress, commentMessage, createdAt);
             var data = mapper.To(order);
             dbContext.Add(data);
             return order;

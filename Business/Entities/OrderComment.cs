@@ -36,10 +36,13 @@ namespace Business.Entities
                 throw new ArgumentNullException(nameof(content));
         }
 
-        internal static OrderComment From(OrderCommentData data) => data == null ? null : new OrderComment(data);
+        internal static class Map
+        {
+            internal static OrderComment From(OrderCommentData data) => data == null ? null : new OrderComment(data);
 
-        internal static OrderCommentData To(OrderComment entity) => entity?.data;
-
-        private static string NormalizeText(string content) => content.Trim();
+            internal static OrderCommentData To(OrderComment entity) => entity?.data;   
+        }
+        
+        private static string NormalizeText(string content) => content.Trim();        
     }
 }

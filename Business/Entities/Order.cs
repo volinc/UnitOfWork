@@ -10,24 +10,11 @@ namespace Business.Entities
         private readonly OrderData data;
         private readonly List<OrderComment> comments;
 
-        public Order(string beginAddress, string endAddress, string commentMessage, DateTimeOffset createdAt)
-        {
-            data = new OrderData
-            {
-                BeginAddress = beginAddress,
-                EndAddress = endAddress,
-                CreatedAt = createdAt,
-            };
-
-            comments = new List<OrderComment>();
-            AddComment(commentMessage, createdAt);
-        }
-
         protected Order(OrderData data)
         {
             this.data = data;
 
-            comments = data.Comments.Select(OrderComment.From).ToList();
+            comments = data.Comments.Select(OrderComment.Map.From).ToList();
         }
 
         public long Id => data.Id;
@@ -44,15 +31,31 @@ namespace Business.Entities
         {
             var comment = new OrderComment(Id, message, createdAt);
 
-            data.Comments.Add(OrderComment.To(comment));
+            data.Comments.Add(OrderComment.Map.To(comment));
             comments.Add(comment);
         }        
 
         internal static string ThrowIfNullAddress(string address) =>
             address ?? throw new ArgumentNullException(nameof(address));
 
-        internal static Order From(OrderData data) => data == null ? null : new Order(data);
+        internal class Map
+        {
+            public static Order From(OrderData data) => data == null ? null : new Order(data);
 
-        internal static OrderData To(Order entity) => entity?.data;     
+            public static OrderData To(Order entity) => entity?.data;   
+        }
+
+        public static Order CreatePresent(string beginAddress, string endAddress, string commentMessage, DateTimeOffset createdAt)
+        {
+            var order = new Order(new OrderData
+            {
+                BeginAddress = beginAddress,
+                EndAddress = endAddress,
+                CreatedAt = createdAt,
+            });
+            
+            order.AddComment(commentMessage, createdAt);
+            return order;
+        }
     }
 }

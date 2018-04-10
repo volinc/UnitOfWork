@@ -4,13 +4,13 @@ namespace Business.Entities
 {
     public class Mapper
     {
-        public Order From(OrderData data) => Order.From(data);
+        public Order From(OrderData data) => Order.Map.From(data);
 
-        public OrderData To(Order entity) => Order.To(entity);
+        public OrderData To(Order entity) => Order.Map.To(entity);
 
-        public OrderComment From(OrderCommentData data) => OrderComment.From(data);
+        public OrderComment From(OrderCommentData data) => OrderComment.Map.From(data);
 
-        public OrderCommentData To(OrderComment entity) => OrderComment.To(entity);
+        public OrderCommentData To(OrderComment entity) => OrderComment.Map.To(entity);
 
         public Suggestion From(SuggestionData data) => Suggestion.From(data);
 
