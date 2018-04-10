@@ -19,6 +19,7 @@ namespace Business.Entities
                 CreatedAt = createdAt,
             };
 
+            comments = new List<OrderComment>();
             AddComment(commentMessage, createdAt);
         }
 
