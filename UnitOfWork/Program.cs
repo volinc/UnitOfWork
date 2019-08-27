@@ -1,20 +1,22 @@
 ﻿using Business;
 using Business.Entities;
 using Data.EF;
+using System.Threading.Tasks;
 
 namespace UnitOfWork
 {
     internal class Program
     {
-        private static void Main()
+        private static async Task Main()
         {
             var mapper = new Mapper();
             var dbContext = new DispatcherDbContext();
             var unitOfWork = new Data.EF.UnitOfWork(dbContext, mapper);
-            var orderService = new OrderService(unitOfWork);
+            var transactionFactory = new TransactionFactory<DispatcherDbContext>(() => dbContext);
+            var orderService = new OrderService(transactionFactory, unitOfWork);
 
-            dbContext.Database.EnsureCreated();
-            orderService.RunAsync().Wait();
+            await dbContext.Database.EnsureCreatedAsync();
+            await orderService.RunAsync();
         }
     }
 }

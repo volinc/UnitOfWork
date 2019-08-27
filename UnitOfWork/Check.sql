@@ -1,0 +1,13 @@
+﻿select * from [OrderComments]
+select * from [Suggestions]
+select * from [Orders]
+--select * from [Shifts]
+--select * from [Drivers]
+--select * from [Vehicles]
+
+delete from [OrderComments]
+delete from [Suggestions]
+delete from [Orders]
+--delete from [Shifts]
+--delete from [Drivers]
+--delete from [Vehicles]
