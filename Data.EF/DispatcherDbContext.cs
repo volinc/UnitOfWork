@@ -19,7 +19,11 @@ namespace Data.EF
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(@"Server=(local);Database=test-db-dispather;Trusted_Connection=True;");                
+                var connectionString = @"Server=(local);Database=test-db-dispather;Trusted_Connection=True;";
+                optionsBuilder.UseSqlServer(connectionString, providerOptions =>
+                {
+                    providerOptions.EnableRetryOnFailure();
+                });                
             }
         }
 
