@@ -12,8 +12,8 @@ namespace UnitOfWork
             var mapper = new Mapper();
             var dbContext = new DispatcherDbContext();
             var unitOfWork = new Data.EF.UnitOfWork(dbContext, mapper);
-            var transactionFactory = new TransactionFactory<DispatcherDbContext>(() => dbContext);
-            var orderService = new OrderService(transactionFactory, unitOfWork);
+            var resilientTransaction = new ResilientTransaction<DispatcherDbContext>(() => dbContext);
+            var orderService = new OrderService(resilientTransaction, unitOfWork);
 
             await dbContext.Database.EnsureCreatedAsync();
             await orderService.RunAsync();
