@@ -27,5 +27,20 @@
                 }
             });
         }
+
+        public async Task<TResult> ExecuteAsync<TResult>(Func<Task<TResult>> func)
+        {
+            var database = dbContextFactory().Database;
+            var strategy = database.CreateExecutionStrategy();
+            return await strategy.ExecuteAsync(async () =>
+            {
+                using (var transaction = database.BeginTransaction())
+                {
+                    var result = await func();
+                    transaction.Commit();
+                    return result;
+                }
+            });
+        }
     }
 }
