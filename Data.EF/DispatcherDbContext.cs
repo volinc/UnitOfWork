@@ -19,7 +19,7 @@ namespace Data.EF
         {
             if (!optionsBuilder.IsConfigured)
             {
-                var connectionString = @"Server=(local);Database=test-db-dispather;Trusted_Connection=True;";
+                var connectionString = @"Server=.; Database=test-db-dispatcher; User Id=sa; Password=12345(!)a;";
                 optionsBuilder.UseSqlServer(connectionString, providerOptions =>
                 {
                     providerOptions.EnableRetryOnFailure();

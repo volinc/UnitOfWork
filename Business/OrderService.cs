@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Threading.Tasks;
 using Business.DataAccess;
 
@@ -30,7 +31,11 @@ namespace Business
                 order = await unitOfWork.Orders.ReadByIdAsync(order.Id);
             });
 
-            var orders = await unitOfWork.Orders.ReadOnlyAllAsync();
+            await resilientTransaction.ExecuteAsync(async () =>
+            {
+                var orders = await unitOfWork.Orders.ReadOnlyAllAsync();
+
+            }, IsolationLevel.ReadUncommitted);
         }
     }
 }

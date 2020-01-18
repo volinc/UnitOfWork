@@ -39,11 +39,8 @@ namespace Data.EF
 
         public async Task<Order[]> ReadOnlyAllAsync()
         {
-            using (var transaction = dbContext.Database.BeginTransaction(IsolationLevel.ReadUncommitted))
-            {
-                var dataset = await dbContext.Orders.AsNoTracking().ToArrayAsync();
-                return dataset.Select(mapper.From).ToArray();
-            }
+            var dataset = await dbContext.Orders.AsNoTracking().ToArrayAsync();
+            return dataset.Select(mapper.From).ToArray();            
         }
     }
 }
