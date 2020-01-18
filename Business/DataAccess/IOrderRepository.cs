@@ -9,5 +9,7 @@ namespace Business.DataAccess
         Order Create(string beginAddress, string endAddress, string commentMessage, DateTimeOffset createdAt);
 
         Task<Order> ReadByIdAsync(long orderId);
+
+        Task<Order[]> ReadOnlyAllAsync();
     }
 }

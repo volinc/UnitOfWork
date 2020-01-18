@@ -29,6 +29,8 @@ namespace Business
 
                 order = await unitOfWork.Orders.ReadByIdAsync(order.Id);
             });
+
+            var orders = await unitOfWork.Orders.ReadOnlyAllAsync();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Business.DataAccess;
@@ -34,6 +35,15 @@ namespace Data.EF
                 .SingleOrDefaultAsync();
 
             return mapper.From(data);
+        }
+
+        public async Task<Order[]> ReadOnlyAllAsync()
+        {
+            using (var transaction = dbContext.Database.BeginTransaction(IsolationLevel.ReadUncommitted))
+            {
+                var dataset = await dbContext.Orders.AsNoTracking().ToArrayAsync();
+                return dataset.Select(mapper.From).ToArray();
+            }
         }
     }
 }
